@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"sync"
 
 	"todo_cli/ado"
 	"todo_cli/services"
@@ -14,13 +15,15 @@ import (
 
 func main() {
 
-	ado.Initialize() //initialize de database
+	//Initialize the database
+	var once sync.Once
+	once.Do(ado.Initialize)
 
 	app := &cli.App{
 		Name:  "todolist",
 		Usage: "Todo list on simple cli",
 		Action: func(c *cli.Context) error {
-			fmt.Println(" *** TODO List ***")
+			printTitle()
 			return nil
 		},
 		Commands: []*cli.Command{
@@ -74,4 +77,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func printTitle() {
+	art := `
+___________        .___       .____    .__          __   
+\__    ___/___   __| _/____   |    |   |__| _______/  |_ 
+   |   | /  _ \ / __ |/  _ \  |    |   |  |/  ___/\   __\
+   |   |(  <_> ) /_/ (  <_> ) |    |___|  |\___ \  |  |  
+   |___| \____/\____ |\____/  |_______ \__/____  > |__|  
+                    \/                \/       \/       
+	`
+
+	fmt.Println(art)
 }
