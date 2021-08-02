@@ -16,8 +16,8 @@ func Add(task string) bool {
 
 	defer db.Close()
 
-	sql := `INSERT INTO todo (task)
-			VALUES(?)`
+	sql := `INSERT INTO todo (created_at,task)
+			VALUES(strftime('%s','now'),?)`
 
 	result, err := db.Exec(sql, task)
 

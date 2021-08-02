@@ -29,7 +29,8 @@ func Initialize() {
 	stmt := `CREATE TABLE IF NOT EXISTS todo (
 		id INTEGER PRIMARY KEY,
 		task TEXT NOT NULL,
-		complete INTEGER DEFAULT 0
+		complete INTEGER DEFAULT 0,
+		created_at INTEGER DEFAULT (strftime('%s','now'))
 	)`
 
 	_, err = db.Exec(stmt)

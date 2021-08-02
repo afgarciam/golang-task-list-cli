@@ -1,8 +1,10 @@
 package services
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"time"
 	"todo_cli/ado"
 	"todo_cli/models"
 
@@ -24,7 +26,8 @@ func List(listAll bool) {
 				 	true 
 				ELSE 
 					false 
-				END complete 
+				END complete,
+				created_at
 			FROM todo `
 
 	if !listAll {
@@ -40,22 +43,25 @@ func List(listAll bool) {
 	defer rows.Close()
 
 	tasks := make([]models.Task, 10)
+	var unixEpoch int64
 
 	for rows.Next() {
+		fmt.Println(rows)
 		t := new(models.Task)
-		rows.Scan(&t.Id, &t.Task, &t.Complete)
+		rows.Scan(&t.Id, &t.Task, &t.Complete, &unixEpoch)
+
+		t.CreatedAt = time.Unix(unixEpoch, unixEpoch)
+
 		tasks = append(tasks, *t)
 	}
 
 	tableOut := table.NewWriter()
-	// tableOut.SetStyle(table.StyleColoredDark)
 	tableOut.SetOutputMirror(os.Stdout)
-	tableOut.AppendHeader(table.Row{"ID", "TASK", "COMPLETE"})
+	tableOut.AppendHeader(table.Row{"ID", "DATE", "TASK", "COMPLETE"})
 
-	for _, element := range tasks {
-		if element.Id != 0 {
-			tableOut.AppendRow(table.Row{element.Id, element.Task, element.Complete})
-
+	for _, e := range tasks {
+		if e.Id != 0 {
+			tableOut.AppendRow(table.Row{e.Id, e.CreatedAt.Format(time.RFC3339), e.Task, e.Complete})
 		}
 	}
 
