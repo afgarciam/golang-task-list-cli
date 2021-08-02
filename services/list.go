@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -46,7 +45,6 @@ func List(listAll bool) {
 	var unixEpoch int64
 
 	for rows.Next() {
-		fmt.Println(rows)
 		t := new(models.Task)
 		rows.Scan(&t.Id, &t.Task, &t.Complete, &unixEpoch)
 

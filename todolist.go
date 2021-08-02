@@ -52,6 +52,21 @@ func main() {
 				},
 			},
 			{
+				Name:    "delete",
+				Aliases: []string{"d"},
+				Usage:   "Delete task with id parameter",
+				Action: func(c *cli.Context) error {
+					taskId, err := strconv.Atoi(c.Args().First())
+
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					services.Delete(taskId)
+					return nil
+				},
+			},
+			{
 				Name:    "list",
 				Aliases: []string{"l"},
 				Usage:   "List of tasks on todo",
