@@ -1,13 +1,19 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
 	"todo_cli/ado"
 )
 
-func Add(task string) bool {
+func Add(task string) error {
+
+	if task == "" {
+		return errors.New("don't add a empty task")
+	}
+
 	db, err := ado.GetConnection()
 
 	if err != nil {
@@ -23,13 +29,13 @@ func Add(task string) bool {
 
 	if err != nil {
 		log.Println(err)
-		return false
+		return err
 	}
 
-	if rows, _ := result.RowsAffected(); rows > 0 {
+	if rows, err := result.RowsAffected(); rows > 0 {
 		fmt.Println("Task added succesfully!")
-		return true
+		return nil
+	} else {
+		return err
 	}
-
-	return false
 }

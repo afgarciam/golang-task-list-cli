@@ -2,15 +2,14 @@ package services
 
 import (
 	"fmt"
-	"log"
 	"todo_cli/ado"
 )
 
-func Complete(id int) bool {
+func Complete(id int) error {
 	db, err := ado.GetConnection()
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	defer db.Close()
@@ -22,15 +21,13 @@ func Complete(id int) bool {
 	result, err := db.Exec(sql, id)
 
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 
-	if rows, _ := result.RowsAffected(); rows > 0 {
+	if rows, err := result.RowsAffected(); rows > 0 {
 		fmt.Printf("Task [%d] completed succesfully! \n", id)
-		return true
+		return nil
+	} else {
+		return err
 	}
-
-	return false
-
 }

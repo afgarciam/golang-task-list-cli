@@ -32,8 +32,7 @@ func main() {
 				Aliases: []string{"a"},
 				Usage:   "Add new task to list",
 				Action: func(c *cli.Context) error {
-					services.Add(c.Args().First())
-					return nil
+					return services.Add(c.Args().First())
 				},
 			},
 			{
@@ -44,11 +43,10 @@ func main() {
 					taskId, err := strconv.Atoi(c.Args().First())
 
 					if err != nil {
-						log.Fatal(err)
+						return err
 					}
 
-					services.Complete(taskId)
-					return nil
+					return services.Complete(taskId)
 				},
 			},
 			{
@@ -59,11 +57,10 @@ func main() {
 					taskId, err := strconv.Atoi(c.Args().First())
 
 					if err != nil {
-						log.Fatal(err)
+						return err
 					}
 
-					services.Delete(taskId)
-					return nil
+					return services.Delete(taskId)
 				},
 			},
 			{
@@ -103,6 +100,5 @@ ___________        .___       .____    .__          __
    |___| \____/\____ |\____/  |_______ \__/____  > |__|  
                     \/                \/       \/       
 	`
-
 	fmt.Println(art)
 }

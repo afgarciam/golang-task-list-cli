@@ -2,16 +2,15 @@ package services
 
 import (
 	"fmt"
-	"log"
 
 	"todo_cli/ado"
 )
 
-func Delete(id int) bool {
+func Delete(id int) error {
 	db, err := ado.GetConnection()
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	defer db.Close()
@@ -21,14 +20,14 @@ func Delete(id int) bool {
 	result, err := db.Exec(sql, id)
 
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 
-	if rows, _ := result.RowsAffected(); rows > 0 {
+	if rows, err := result.RowsAffected(); rows > 0 {
 		fmt.Println("Task deleted succesfully!")
-		return true
+		return nil
+	} else {
+		return err
 	}
 
-	return false
 }

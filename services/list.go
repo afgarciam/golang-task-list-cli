@@ -53,6 +53,10 @@ func List(listAll bool) {
 		tasks = append(tasks, *t)
 	}
 
+	printTable(tasks)
+}
+
+func printTable(tasks []models.Task) {
 	tableOut := table.NewWriter()
 	tableOut.SetOutputMirror(os.Stdout)
 	tableOut.AppendHeader(table.Row{"ID", "DATE", "TASK", "COMPLETE"})
